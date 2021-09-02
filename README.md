@@ -16,8 +16,11 @@ Num of records: 69905 11.478167ms
 
 
 rocksDb setup guide in ubuntu
-dependencies:
+--
+Dependencies:
+
 Upgrade your gcc to version at least 4.8 to get C++11 support.
+
 Install gflags. First, try: sudo apt-get install libgflags-dev 
 If this doesn't work and you're using Ubuntu, here's a nice tutorial: (http://askubuntu.com/questions/312173/installing-gflags-12-04)
 
