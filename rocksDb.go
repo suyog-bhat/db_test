@@ -65,9 +65,9 @@ func checkRocksDb(wg *sync.WaitGroup) {
 		return
 	}
 
-	fmt.Fprintf(file,"Toatal count:1000000000\n")
+	fmt.Fprintf(file, "Toatal count:1000000000\n")
 	fmt.Fprintf(file, "%s\n", "prefix:00e\ncount:"+fmt.Sprintf("%d\nreadtime: %v\nwriteTime:%v",
-		recordCount,t4.Sub(t3),t2.Sub(t1)))
+		recordCount, t4.Sub(t3), t2.Sub(t1)))
 	file.Close()
 	//err = db.Delete(wo, wb)
 	db.Close()
@@ -79,9 +79,9 @@ func putBatchrocks(wb *grocksdb.WriteBatch) {
 	//	wb.Put([]byte(fmt.Sprintf("%d", i)), []byte("qwe"))
 	//	i++
 	//}
-	buf := []byte{'0','0', 4 + 16: 0}
+	buf := []byte{'0', '0', 4 + 16: 0}
 	var i int64
-	for i = 0; i < 1000; i++ {
+	for i = 0; i < 1000000000; i++ {
 		buf = strconv.AppendInt(buf[:2], i, 16)
 		wb.Put(buf, []byte("random"))
 	}
@@ -95,7 +95,6 @@ func countRecordsRocks(it *grocksdb.Iterator) int {
 	}
 	return count
 }
-
 
 func checklevelDb(wg *sync.WaitGroup) {
 	db, err := leveldb.OpenFile("./lvldb", nil)
@@ -113,7 +112,7 @@ func checklevelDb(wg *sync.WaitGroup) {
 	fmt.Println("LevelDb-----")
 	fmt.Println("time took for write", t2.Sub(t1))
 
-	prefix:=[]byte("00e")
+	prefix := []byte("00e")
 	iter := db.NewIterator(util.BytesPrefix(prefix), nil)
 	t3 := time.Now()
 	count := countRecordsLevel(&iter)
@@ -125,9 +124,9 @@ func checklevelDb(wg *sync.WaitGroup) {
 		return
 	}
 
-	fmt.Fprintf(file,"Toatal count:1000000000\n")
+	fmt.Fprintf(file, "Toatal count:1000000000\n")
 	fmt.Fprintf(file, "%s\n", "prefix:00e\ncount:"+fmt.Sprintf("%d\nreadtime: %v\nwriteTime:%v\n",
-		count,t4.Sub(t3),t2.Sub(t1)))
+		count, t4.Sub(t3), t2.Sub(t1)))
 	file.Close()
 	iter.Release()
 	wg.Done()
@@ -139,9 +138,9 @@ func putBatchlevel(batch *leveldb.Batch) {
 	//	batch.Put([]byte(fmt.Sprintf("%d", i)), []byte("qwe"))
 	//	i++
 	//}
-	buf := []byte{'0','0', 4 + 16: 0}
+	buf := []byte{'0', '0', 4 + 16: 0}
 	var i int64
-	for i = 0; i < 1000; i++ {
+	for i = 0; i < 1000000000; i++ {
 		buf = strconv.AppendInt(buf[:2], i, 16)
 		batch.Put(buf, []byte("random"))
 	}
