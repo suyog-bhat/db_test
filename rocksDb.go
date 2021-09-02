@@ -8,7 +8,6 @@ import (
 	"github.com/syndtr/goleveldb/leveldb/util"
 	"os"
 	"strconv"
-	"sync"
 	"time"
 )
 
@@ -17,16 +16,16 @@ var (
 )
 
 func main() {
-	wg := sync.WaitGroup{}
-	wg.Add(2)
+	//wg := sync.WaitGroup{}
+	//wg.Add(2)
 	//wg *sync.WaitGroup
-	checkRocksDb(&wg)
-	checklevelDb(&wg)
-	wg.Wait()
+	checkRocksDb()
+	checklevelDb()
+	//wg.Wait()
 
 }
 
-func checkRocksDb(wg *sync.WaitGroup) {
+func checkRocksDb() {
 	numberOfWritesStr := os.Getenv("NUMBER")
 	numberOfWrites, _ = strconv.Atoi(numberOfWritesStr)
 	bbto := grocksdb.NewDefaultBlockBasedTableOptions()
@@ -71,7 +70,7 @@ func checkRocksDb(wg *sync.WaitGroup) {
 	file.Close()
 	//err = db.Delete(wo, wb)
 	db.Close()
-	wg.Done()
+	//wg.Done()
 }
 
 func putBatchrocks(wb *grocksdb.WriteBatch) {
@@ -96,7 +95,7 @@ func countRecordsRocks(it *grocksdb.Iterator) int {
 	return count
 }
 
-func checklevelDb(wg *sync.WaitGroup) {
+func checklevelDb() {
 	db, err := leveldb.OpenFile("./lvldb", nil)
 	if err != nil {
 		fmt.Println(err)
@@ -129,7 +128,7 @@ func checklevelDb(wg *sync.WaitGroup) {
 		count, t4.Sub(t3), t2.Sub(t1)))
 	file.Close()
 	iter.Release()
-	wg.Done()
+	//wg.Done()
 
 }
 
