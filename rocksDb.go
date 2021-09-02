@@ -8,6 +8,7 @@ import (
 	"github.com/syndtr/goleveldb/leveldb/util"
 	"os"
 	"strconv"
+	"sync"
 	"time"
 )
 
@@ -16,16 +17,16 @@ var (
 )
 
 func main() {
-	//wg := sync.WaitGroup{}
-	//wg.Add(2)
+	wg := sync.WaitGroup{}
+	wg.Add(2)
 	//wg *sync.WaitGroup
-	checkRocksDb()
-	checklevelDb()
-	//wg.Wait()
+	checkRocksDb(&wg)
+	checklevelDb(&wg)
+	wg.Wait()
 
 }
 
-func checkRocksDb() {
+func checkRocksDb(wg *sync.WaitGroup) {
 	numberOfWritesStr := os.Getenv("NUMBER")
 	numberOfWrites, _ = strconv.Atoi(numberOfWritesStr)
 	bbto := grocksdb.NewDefaultBlockBasedTableOptions()
@@ -58,9 +59,19 @@ func checkRocksDb() {
 	it.Close()
 	t4 := time.Now()
 	fmt.Println("Num of records:", recordCount, t4.Sub(t3))
+	file, err := os.OpenFile("rocksOut.txt", os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Fprintf(file,"Toatal count:1000000000\n")
+	fmt.Fprintf(file, "%s\n", "prefix:00e\ncount:"+fmt.Sprintf("%d\nreadtime: %v\nwriteTime:%v",
+		recordCount,t4.Sub(t3),t2.Sub(t1)))
+	file.Close()
 	//err = db.Delete(wo, wb)
 	db.Close()
-	//wg.Done()
+	wg.Done()
 }
 
 func putBatchrocks(wb *grocksdb.WriteBatch) {
@@ -86,7 +97,7 @@ func countRecordsRocks(it *grocksdb.Iterator) int {
 }
 
 
-func checklevelDb() {
+func checklevelDb(wg *sync.WaitGroup) {
 	db, err := leveldb.OpenFile("./lvldb", nil)
 	if err != nil {
 		fmt.Println(err)
@@ -108,8 +119,18 @@ func checklevelDb() {
 	count := countRecordsLevel(&iter)
 	t4 := time.Now()
 	fmt.Println("Num of records:", count, t4.Sub(t3))
+	file, err := os.OpenFile("levelOut.txt", os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Fprintf(file,"Toatal count:1000000000\n")
+	fmt.Fprintf(file, "%s\n", "prefix:00e\ncount:"+fmt.Sprintf("%d\nreadtime: %v\nwriteTime:%v\n",
+		count,t4.Sub(t3),t2.Sub(t1)))
+	file.Close()
 	iter.Release()
-	//wg.Done()
+	wg.Done()
 
 }
 
