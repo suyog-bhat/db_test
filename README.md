@@ -1,12 +1,19 @@
 # db_test
 For 10000000 records (ec2 instance)
 
-RocksDB----
+RocksDB
+--
 time took for write: 4.342664708s
+--
 Num of records: 69905 17.378042ms
-LevelDb-----
+---------------------------------
+LevelDb
+--
 time took for write 2m37.513682112s
+--
 Num of records: 69905 11.478167ms
+---------------------------------
+
 
 rocksDb setup guide in ubuntu
 dependencies:
