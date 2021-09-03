@@ -5,13 +5,13 @@ RocksDB
 --
 time took for write: 4.342664708s
 
-Num of records: 69905 17.378042ms
+Num of records read(with prefix search): 69905    time: 17.378042ms
 
 LevelDb
 --
-time took for write 2m37.513682112s
+time took for write: 2m37.513682112s
 
-Num of records: 69905 11.478167ms
+Num of records read(with prefix search): 69905    time: 11.478167ms
 
 
 
